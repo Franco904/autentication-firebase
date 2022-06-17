@@ -47,7 +47,8 @@ InputDecoration getFormFieldDecoration(String label) {
     errorStyle: textTheme.subtitle2?.copyWith(
       color: AppColors.red900,
     ),
-    helperText: '',
+    helperText: ' ',
+    errorMaxLines: 2,
     filled: true,
   );
 }

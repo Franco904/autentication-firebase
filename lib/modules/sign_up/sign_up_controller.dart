@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AuthenticationController extends GetxController {
+class SignUpController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
-  final authEmailFocusNode = FocusNode();
-  final authPasswordFocusNode = FocusNode();
+  final usernameFocusNode = FocusNode();
+  final signUpEmailFocusNode = FocusNode();
+  final signUpPasswordFocusNode = FocusNode();
 
-  final isLoggedIn = false.obs;
-
-  Future<void> signIn() async {
+  Future<void> signUp() async {
     await Future.delayed(const Duration(milliseconds: 20));
 
     formKey.currentState?.save();
