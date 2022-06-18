@@ -9,6 +9,7 @@ class PasswordFieldSignUp extends GetView<SignUpController> {
   Widget build(BuildContext context) {
     return StandardTextFormField(
       label: 'Senha',
+      hasObscureText: true,
       validator: validatePassword,
       onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
       focusNode: controller.signUpPasswordFocusNode,

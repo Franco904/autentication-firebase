@@ -1,4 +1,5 @@
 import 'package:authentication_firebase/core/theme/app_colors.dart';
+import 'package:authentication_firebase/global_widgets/custom_painter.dart';
 import 'package:authentication_firebase/modules/authentication/authentication_controller.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/email_field_auth.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/password_field_auth.dart';
@@ -19,50 +20,26 @@ class AuthenticationPage extends GetView<AuthenticationController> {
         backgroundColor: AppColors.white,
         body: LayoutBuilder(
           builder: (_, constraints) {
-            return SizedBox(
-              height: constraints.maxHeight,
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32),
-                      bottomRight: Radius.circular(32),
-                    ),
-                    child: Container(
-                      height: constraints.maxHeight * 0.64,
-                      decoration: BoxDecoration(
-                        color: AppColors.greenMarineLight,
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 1),
-                            blurRadius: 16,
-                            spreadRadius: -4,
-                            color: AppColors.blackShadow,
-                          ),
-                        ],
-                      ),
-                    ),
+            return CustomPaint(
+              painter: StandardPainter(),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: ListView(
+                    padding: const EdgeInsets.only(bottom: 56),
+                    children: const [
+                      SizedBox(height: 44),
+                      LogoSection(),
+                      SizedBox(height: 16),
+                      AuthSection(),
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      child: ListView(
-                        children: const [
-                          SizedBox(height: 44),
-                          LogoSection(),
-                          SizedBox(height: 44),
-                          AuthSection(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           },
         ),
-        resizeToAvoidBottomInset: false,
       ),
     );
   }
@@ -79,6 +56,7 @@ class LogoSection extends GetView<AuthenticationController> {
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.whiteSmoke,
+            borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
                 offset: const Offset(0, 1),
@@ -87,11 +65,10 @@ class LogoSection extends GetView<AuthenticationController> {
                 color: AppColors.blackShadow,
               ),
             ],
-            shape: BoxShape.circle,
           ),
           child: const Padding(
-            padding: EdgeInsets.all(36),
-            child: Text('Logo'),
+            padding: EdgeInsets.symmetric(horizontal: 36, vertical: 16),
+            child: Text('Autenticação', style: TextStyle(fontWeight: FontWeight.w500)),
           ),
         ),
       ),
@@ -129,16 +106,6 @@ class AuthSection extends GetView<AuthenticationController> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Autenticação',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
                       EmailFieldAuth(),
                       const SizedBox(height: 24),
                       PasswordFieldAuth(),

@@ -1,9 +1,11 @@
+import 'package:authentication_firebase/core/theme/app_colors.dart';
 import 'package:authentication_firebase/core/util/input_decoration.dart';
 import 'package:flutter/material.dart';
 
 class StandardTextFormField extends StatefulWidget {
   final String label;
   final String? initialValue;
+  final bool hasObscureText;
 
   final FormFieldValidator<String?>? validator;
   final void Function(String? value)? onFieldSubmitted;
@@ -14,6 +16,7 @@ class StandardTextFormField extends StatefulWidget {
     Key? key,
     required this.label,
     this.initialValue,
+    this.hasObscureText = false,
     this.validator,
     this.onFieldSubmitted,
     this.focusNode,
@@ -26,19 +29,48 @@ class StandardTextFormField extends StatefulWidget {
 class _StandardTextFormFieldState extends State<StandardTextFormField> {
   GlobalKey<FormFieldState> defaultFieldKey = GlobalKey<FormFieldState>();
 
+  bool obscureText = false;
+  bool isInvalid = false;
+
+  @override
+  void initState() {
+    obscureText = widget.hasObscureText;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Focus(
-      onFocusChange: (_) => defaultFieldKey.currentState?.validate(),
+      onFocusChange: (hasFocus) {
+        if (hasFocus) setState(() => isInvalid = false);
+        defaultFieldKey.currentState?.validate();
+      },
       child: Builder(builder: (context) {
         return TextFormField(
           key: defaultFieldKey,
           initialValue: widget.initialValue ?? '',
-          decoration: getFormFieldDecoration(widget.label),
+          obscureText: obscureText,
+          decoration: getFormFieldDecoration(widget.label).copyWith(
+            suffixIcon: widget.hasObscureText
+                ? IconButton(
+                    icon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 150),
+                      child: Icon(
+                        obscureText ? Icons.visibility : Icons.visibility_off,
+                        color: isInvalid ? AppColors.red900 : null,
+                      ),
+                    ),
+                    onPressed: () => setState(() => obscureText = !obscureText),
+                  )
+                : null,
+          ),
           validator: (value) {
             if (FocusScope.of(context).hasFocus) return null;
 
             final validation = widget.validator != null ? widget.validator!(value) : null;
+            setState(() => isInvalid = validation != null);
+
             return validation;
           },
           onFieldSubmitted: widget.onFieldSubmitted,
