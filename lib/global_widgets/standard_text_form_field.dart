@@ -29,12 +29,12 @@ class StandardTextFormField extends StatefulWidget {
 class _StandardTextFormFieldState extends State<StandardTextFormField> {
   GlobalKey<FormFieldState> defaultFieldKey = GlobalKey<FormFieldState>();
 
-  bool obscureText = false;
+  bool isTextObscured = false;
   bool isInvalid = false;
 
   @override
   void initState() {
-    obscureText = widget.hasObscureText;
+    isTextObscured = widget.hasObscureText;
 
     super.initState();
   }
@@ -50,18 +50,15 @@ class _StandardTextFormFieldState extends State<StandardTextFormField> {
         return TextFormField(
           key: defaultFieldKey,
           initialValue: widget.initialValue ?? '',
-          obscureText: obscureText,
+          obscureText: isTextObscured,
           decoration: getFormFieldDecoration(widget.label).copyWith(
             suffixIcon: widget.hasObscureText
                 ? IconButton(
-                    icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 150),
-                      child: Icon(
-                        obscureText ? Icons.visibility : Icons.visibility_off,
-                        color: isInvalid ? AppColors.red900 : null,
-                      ),
+                    icon: Icon(
+                      isTextObscured ? Icons.visibility : Icons.visibility_off,
+                      color: isInvalid ? AppColors.red900 : null,
                     ),
-                    onPressed: () => setState(() => obscureText = !obscureText),
+                    onPressed: () => setState(() => isTextObscured = !isTextObscured),
                   )
                 : null,
           ),

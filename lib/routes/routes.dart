@@ -1,5 +1,6 @@
 import 'package:authentication_firebase/modules/authentication/authentication_controller.dart';
 import 'package:authentication_firebase/modules/authentication/authentication_page.dart';
+import 'package:authentication_firebase/modules/done/done_page.dart';
 import 'package:authentication_firebase/modules/sign_up/sign_up_controller.dart';
 import 'package:authentication_firebase/modules/sign_up/sign_up_page.dart';
 import 'package:get/get.dart';
@@ -16,5 +17,6 @@ List<GetPage> getPages() {
       page: () => const SignUpPage(),
       binding: BindingsBuilder<void>(() => Get.lazyPut<SignUpController>(() => SignUpController())),
     ),
+    GetPage<void>(name: DonePage.route, page: () => const DonePage()),
   ];
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmailFieldSignUp extends GetView<SignUpController> {
+  const EmailFieldSignUp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StandardTextFormField(

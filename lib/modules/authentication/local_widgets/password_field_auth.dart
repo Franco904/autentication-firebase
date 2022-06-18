@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PasswordFieldAuth extends GetView<AuthenticationController> {
+  const PasswordFieldAuth({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StandardTextFormField(

@@ -106,9 +106,9 @@ class AuthSection extends GetView<AuthenticationController> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      EmailFieldAuth(),
+                      const EmailFieldAuth(),
                       const SizedBox(height: 24),
-                      PasswordFieldAuth(),
+                      const PasswordFieldAuth(),
                       const SizedBox(height: 24),
                       Align(
                         alignment: Alignment.centerRight,
@@ -120,7 +120,10 @@ class AuthSection extends GetView<AuthenticationController> {
                             ElevatedButton(
                               onPressed: () => Get.offNamed(SignUpPage.route),
                               child: Text('Não tenho conta', style: TextStyle(color: Colors.grey[900])),
-                              style: ElevatedButton.styleFrom(primary: AppColors.white),
+                              style: ElevatedButton.styleFrom(
+                                primary: AppColors.white,
+                                animationDuration: const Duration(milliseconds: 400),
+                              ),
                             ),
                             ElevatedButton(
                               onPressed: () {

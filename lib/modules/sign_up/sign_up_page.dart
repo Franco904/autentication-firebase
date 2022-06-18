@@ -30,7 +30,7 @@ class SignUpPage extends GetView<SignUpController> {
                   constraints: const BoxConstraints(maxWidth: 800),
                   child: ListView(
                     padding: const EdgeInsets.only(bottom: 56),
-                    children: [
+                    children: const [
                       SizedBox(height: 44),
                       LogoSection(),
                       SizedBox(height: 16),
@@ -48,6 +48,8 @@ class SignUpPage extends GetView<SignUpController> {
 }
 
 class LogoSection extends GetView<SignUpController> {
+  const LogoSection({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -77,6 +79,8 @@ class LogoSection extends GetView<SignUpController> {
 }
 
 class SignInSection extends GetView<SignUpController> {
+  const SignInSection({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -104,11 +108,11 @@ class SignInSection extends GetView<SignUpController> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      UsernameField(),
+                      const UsernameField(),
                       const SizedBox(height: 24),
-                      EmailFieldSignUp(),
+                      const EmailFieldSignUp(),
                       const SizedBox(height: 24),
-                      PasswordFieldSignUp(),
+                      const PasswordFieldSignUp(),
                       const SizedBox(height: 24),
                       Align(
                         alignment: Alignment.centerRight,
@@ -120,7 +124,10 @@ class SignInSection extends GetView<SignUpController> {
                             ElevatedButton(
                               onPressed: () => Get.offNamed(AuthenticationPage.route),
                               child: Text('Voltar', style: TextStyle(color: Colors.grey[900])),
-                              style: ElevatedButton.styleFrom(primary: AppColors.white),
+                              style: ElevatedButton.styleFrom(
+                                primary: AppColors.white,
+                                animationDuration: const Duration(milliseconds: 400),
+                              ),
                             ),
                             ElevatedButton.icon(
                               onPressed: () {
