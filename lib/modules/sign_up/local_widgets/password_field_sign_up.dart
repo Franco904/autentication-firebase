@@ -1,10 +1,10 @@
 import 'package:authentication_firebase/core/util/validations.dart';
 import 'package:authentication_firebase/global_widgets/standard_text_form_field.dart';
-import 'package:authentication_firebase/modules/sign_up/sign_up_controller.dart';
+import 'package:authentication_firebase/modules/sign_up/sign_up_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PasswordFieldSignUp extends GetView<SignUpController> {
+class PasswordFieldSignUp extends GetView<SignUpPageController> {
   const PasswordFieldSignUp({Key? key}) : super(key: key);
 
   @override

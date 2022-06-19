@@ -8,6 +8,7 @@ class StandardTextFormField extends StatefulWidget {
   final bool hasObscureText;
 
   final FormFieldValidator<String?>? validator;
+  final void Function(String? value)? onChanged;
   final void Function(String? value)? onFieldSubmitted;
 
   final FocusNode? focusNode;
@@ -18,6 +19,7 @@ class StandardTextFormField extends StatefulWidget {
     this.initialValue,
     this.hasObscureText = false,
     this.validator,
+    this.onChanged,
     this.onFieldSubmitted,
     this.focusNode,
   }) : super(key: key);
@@ -70,6 +72,8 @@ class _StandardTextFormFieldState extends State<StandardTextFormField> {
 
             return validation;
           },
+          textInputAction: TextInputAction.next,
+          onChanged: widget.onChanged,
           onFieldSubmitted: widget.onFieldSubmitted,
           focusNode: widget.focusNode,
         );

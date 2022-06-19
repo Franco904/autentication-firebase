@@ -1,13 +1,13 @@
 import 'package:authentication_firebase/core/theme/app_colors.dart';
-import 'package:authentication_firebase/global_widgets/custom_painter.dart';
-import 'package:authentication_firebase/modules/authentication/authentication_controller.dart';
+import 'package:authentication_firebase/global_widgets/standard_painter.dart';
+import 'package:authentication_firebase/modules/authentication/authentication_page_controller.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/email_field_auth.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/password_field_auth.dart';
 import 'package:authentication_firebase/modules/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AuthenticationPage extends GetView<AuthenticationController> {
+class AuthenticationPage extends GetView<AuthenticationPageController> {
   static const route = '/auth';
 
   const AuthenticationPage({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class AuthenticationPage extends GetView<AuthenticationController> {
   }
 }
 
-class LogoSection extends GetView<AuthenticationController> {
+class LogoSection extends GetView<AuthenticationPageController> {
   const LogoSection({Key? key}) : super(key: key);
 
   @override
@@ -76,7 +76,7 @@ class LogoSection extends GetView<AuthenticationController> {
   }
 }
 
-class AuthSection extends GetView<AuthenticationController> {
+class AuthSection extends GetView<AuthenticationPageController> {
   const AuthSection({Key? key}) : super(key: key);
 
   @override

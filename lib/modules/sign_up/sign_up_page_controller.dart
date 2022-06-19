@@ -2,12 +2,12 @@ import 'package:authentication_firebase/modules/done/done_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpController extends GetxController {
-  final formKey = GlobalKey<FormState>();
+class SignUpPageController extends GetxController {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final usernameFocusNode = FocusNode();
-  final signUpEmailFocusNode = FocusNode();
-  final signUpPasswordFocusNode = FocusNode();
+  final FocusNode usernameFocusNode = FocusNode();
+  final FocusNode signUpEmailFocusNode = FocusNode();
+  final FocusNode signUpPasswordFocusNode = FocusNode();
 
   Future<void> signUp() async {
     await Future.delayed(const Duration(milliseconds: 20));
