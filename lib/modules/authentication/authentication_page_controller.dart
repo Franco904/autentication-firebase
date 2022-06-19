@@ -1,6 +1,8 @@
 import 'package:authentication_firebase/core/controllers/auth_controller.dart';
+import 'package:authentication_firebase/global_widgets/connectivity_bottomsheet.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/auth_error_bottomsheet.dart';
 import 'package:authentication_firebase/modules/done/done_page.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,14 @@ class AuthenticationPageController extends GetxController {
   Future<void> fetchUser() async {
     authController.authTried.value = true;
 
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      return Get.bottomSheet(const ConnectivityBottomsheet(
+        title: 'Conexão perdida',
+        message: 'Houve um problema na conexão com a sua internet e a autenticação não pode ser realizada.',
+      ));
+    }
+
     try {
       await authController.signInWithEmailAndPassword(authEmail.value, authPassword.value);
     } on FirebaseAuthException catch (e) {
@@ -40,7 +50,8 @@ class AuthenticationPageController extends GetxController {
           break;
 
         default:
-          errorMessage.value = 'Ops! Algum erro inesperado ocorreu: ${e.code}';
+          errorMessage.value = 'Ops! Algum erro inesperado ocorreu.';
+          debugPrint(e.code);
           break;
       }
 

@@ -7,7 +7,7 @@ String? validateRequired(String? value) {
 String? validateEmail(String? value) {
   if (value == '' || value == null) return 'Obrigatório';
 
-  final exp = RegExp(r'^[\w\.\-]+@[\w\.\-]+$');
+  final exp = RegExp(r'^[\w\.-]+@[\w\.-]+$');
   if (!exp.hasMatch(value)) return 'Email inválido';
 
   return null;
