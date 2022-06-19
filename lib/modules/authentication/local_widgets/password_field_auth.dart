@@ -12,6 +12,7 @@ class PasswordFieldAuth extends GetView<AuthenticationPageController> {
     return StandardTextFormField(
       label: 'Senha',
       hasObscureText: true,
+      maxLength: 20,
       validator: validatePassword,
       onChanged: onChanged,
       onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),

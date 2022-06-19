@@ -9,6 +9,7 @@ abstract class AppColors {
   static final red900 = Colors.red.shade900;
 
   static final grey300 = Colors.grey.shade300;
+  static final grey600 = Colors.grey.shade600;
   static final grey900 = Colors.grey.shade900;
 
   static const black = Colors.black;

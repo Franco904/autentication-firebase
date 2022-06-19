@@ -6,6 +6,7 @@ class StandardTextFormField extends StatefulWidget {
   final String label;
   final String? initialValue;
   final bool hasObscureText;
+  final int? maxLength;
 
   final FormFieldValidator<String?>? validator;
   final void Function(String? value)? onChanged;
@@ -18,6 +19,7 @@ class StandardTextFormField extends StatefulWidget {
     required this.label,
     this.initialValue,
     this.hasObscureText = false,
+    this.maxLength,
     this.validator,
     this.onChanged,
     this.onFieldSubmitted,
@@ -53,6 +55,7 @@ class _StandardTextFormFieldState extends State<StandardTextFormField> {
           key: defaultFieldKey,
           initialValue: widget.initialValue ?? '',
           obscureText: isTextObscured,
+          maxLength: widget.maxLength,
           decoration: getFormFieldDecoration(widget.label).copyWith(
             suffixIcon: widget.hasObscureText
                 ? IconButton(
@@ -76,6 +79,16 @@ class _StandardTextFormFieldState extends State<StandardTextFormField> {
           onChanged: widget.onChanged,
           onFieldSubmitted: widget.onFieldSubmitted,
           focusNode: widget.focusNode,
+          buildCounter: widget.maxLength == null
+              ? null
+              : (_, {required currentLength, maxLength, required isFocused}) {
+                  return Container(
+                      transform: Matrix4.translationValues(13, 0, 0),
+                      child: Text(
+                        '$currentLength/$maxLength',
+                        style: TextStyle(color: isInvalid ? AppColors.red900 : AppColors.grey600),
+                      ));
+                },
         );
       }),
     );

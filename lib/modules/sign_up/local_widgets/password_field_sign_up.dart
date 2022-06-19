@@ -12,6 +12,7 @@ class PasswordFieldSignUp extends GetView<SignUpPageController> {
     return StandardTextFormField(
       label: 'Senha',
       hasObscureText: true,
+      maxLength: 20,
       validator: validatePassword,
       onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
       focusNode: controller.signUpPasswordFocusNode,
