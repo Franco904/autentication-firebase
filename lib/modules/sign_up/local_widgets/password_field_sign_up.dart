@@ -14,8 +14,18 @@ class PasswordFieldSignUp extends GetView<SignUpPageController> {
       hasObscureText: true,
       maxLength: 20,
       validator: validatePassword,
+      onChanged: onChanged,
       onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
       focusNode: controller.signUpPasswordFocusNode,
     );
+  }
+
+  void onChanged(String? password) {
+    if (password == null || password.isEmpty) {
+      controller.signUpPassword.value = '';
+      return;
+    }
+
+    controller.signUpPassword.value = password;
   }
 }

@@ -12,8 +12,18 @@ class EmailFieldSignUp extends GetView<SignUpPageController> {
     return StandardTextFormField(
       label: 'Email',
       validator: validateEmail,
+      onChanged: onChanged,
       onFieldSubmitted: (_) => controller.signUpPasswordFocusNode.requestFocus(),
       focusNode: controller.signUpEmailFocusNode,
     );
+  }
+
+  void onChanged(String? email) {
+    if (email == null || email.isEmpty) {
+      controller.signUpEmail.value = '';
+      return;
+    }
+
+    controller.signUpEmail.value = email;
   }
 }

@@ -11,13 +11,14 @@ class AuthController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    await finishSession();
+    if (currentUser != null) await finishSession();
+
     FirebaseAuth.instance.authStateChanges().listen(
       (User? user) {
         if (user == null && authTried.value) {
           debugPrint('Usuário não encontrado.');
         } else if (user != null) {
-          debugPrint('Usuário foi autenticado: ${user.displayName} - ${user.email}');
+          debugPrint('Usuário foi autenticado: ${user.email}');
         }
       },
     );
@@ -25,8 +26,16 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
+  Future<UserCredential> signUpUser(String email, String password) async {
+    return await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim());
+  }
+
+  Future<void> updateUsername(User user, String username) async {
+    await user.updateDisplayName(username.trim());
+  }
+
   Future<UserCredential> signInWithEmailAndPassword(String email, String password) async {
-    return await auth.signInWithEmailAndPassword(email: email, password: password);
+    return await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
   }
 
   Future<void> finishSession() async {

@@ -129,13 +129,26 @@ class SignInSection extends GetView<SignUpPageController> {
                                 animationDuration: const Duration(milliseconds: 400),
                               ),
                             ),
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                FocusScope.of(context).unfocus();
-                                controller.signUp();
-                              },
-                              label: const Text('Cadastrar', style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold)),
-                              icon: const Icon(Icons.add, color: AppColors.white),
+                            SizedBox(
+                              height: 48,
+                              child: Obx(
+                                () => AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: controller.isLoading.value
+                                      ? Transform.scale(
+                                          scale: 0.75,
+                                          child: const CircularProgressIndicator(),
+                                        )
+                                      : ElevatedButton.icon(
+                                          onPressed: () {
+                                            FocusScope.of(context).unfocus();
+                                            controller.signUp();
+                                          },
+                                          label: const Text('Cadastrar', style: TextStyle(color: AppColors.white)),
+                                          icon: const Icon(Icons.add, color: AppColors.white),
+                                        ),
+                                ),
+                              ),
                             ),
                           ],
                         ),

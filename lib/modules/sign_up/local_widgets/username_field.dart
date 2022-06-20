@@ -12,8 +12,18 @@ class UsernameField extends GetView<SignUpPageController> {
     return StandardTextFormField(
       label: 'Nome de usuário',
       validator: validateRequired,
+      onChanged: onChanged,
       onFieldSubmitted: (_) => controller.signUpEmailFocusNode.requestFocus(),
       focusNode: controller.usernameFocusNode,
     );
+  }
+
+  void onChanged(String? username) {
+    if (username == null || username.isEmpty) {
+      controller.signUpUsername.value = '';
+      return;
+    }
+
+    controller.signUpUsername.value = username;
   }
 }

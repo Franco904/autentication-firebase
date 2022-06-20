@@ -125,13 +125,26 @@ class AuthSection extends GetView<AuthenticationPageController> {
                                 animationDuration: const Duration(milliseconds: 400),
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                FocusScope.of(context).unfocus();
-                                controller.signIn();
-                              },
-                              child: const Text('Entrar', style: TextStyle(color: AppColors.white)),
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.greenMarineLight)),
+                            SizedBox(
+                              height: 48,
+                              child: Obx(
+                                () => AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: controller.isLoading.value
+                                      ? Transform.scale(
+                                          scale: 0.75,
+                                          child: const CircularProgressIndicator(),
+                                        )
+                                      : ElevatedButton(
+                                          onPressed: () {
+                                            FocusScope.of(context).unfocus();
+                                            controller.signIn();
+                                          },
+                                          child: const Text('Entrar', style: TextStyle(color: AppColors.white)),
+                                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.greenMarineLight)),
+                                        ),
+                                ),
+                              ),
                             ),
                           ],
                         ),

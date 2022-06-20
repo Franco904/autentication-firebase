@@ -40,6 +40,9 @@ class DonePage extends GetView<DonePageController> {
                   const SizedBox(height: 24),
                   const Text('Entrada realizada com sucesso', style: TextStyle(fontWeight: FontWeight.w500)),
                   const SizedBox(height: 16),
+                  Text('Boas-vindas ${controller.authController.currentUser?.displayName ?? 'Fulano'}!',
+                      style: const TextStyle(fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: controller.finishCurrentSession,
                     child: Text('Encerrar sessão', style: TextStyle(color: Colors.grey[900])),

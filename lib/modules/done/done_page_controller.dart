@@ -9,6 +9,6 @@ class DonePageController extends GetxController {
     authController.finishSession();
     authController.authTried.value = false;
 
-    Get.offNamed(AuthenticationPage.route);
+    Get.offAllNamed(AuthenticationPage.route);
   }
 }

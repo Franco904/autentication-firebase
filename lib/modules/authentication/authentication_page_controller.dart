@@ -1,8 +1,7 @@
 import 'package:authentication_firebase/core/controllers/auth_controller.dart';
-import 'package:authentication_firebase/global_widgets/connectivity_bottomsheet.dart';
+import 'package:authentication_firebase/core/util/connectivity.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/auth_error_bottomsheet.dart';
 import 'package:authentication_firebase/modules/done/done_page.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -12,6 +11,8 @@ class AuthenticationPageController extends GetxController {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  final RxBool isLoading = false.obs;
+
   final RxString authEmail = ''.obs;
   final RxString authPassword = ''.obs;
   final RxString errorMessage = ''.obs;
@@ -20,25 +21,24 @@ class AuthenticationPageController extends GetxController {
   final FocusNode authPasswordFocusNode = FocusNode();
 
   Future<void> signIn() async {
+    if (!await checkInternet()) return;
+
+    isLoading.value = true;
+
     await Future.delayed(const Duration(milliseconds: 20));
     formKey.currentState?.save();
 
     final isFormValid = formKey.currentState?.validate();
-    if (isFormValid != null && !isFormValid) return;
+    if (isFormValid != null && !isFormValid) {
+      isLoading.value = false;
+      return;
+    }
 
     await fetchUser();
   }
 
   Future<void> fetchUser() async {
     authController.authTried.value = true;
-
-    final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      return Get.bottomSheet(const ConnectivityBottomsheet(
-        title: 'Conexão perdida',
-        message: 'Houve um problema na conexão com a sua internet e a autenticação não pode ser realizada.',
-      ));
-    }
 
     try {
       await authController.signInWithEmailAndPassword(authEmail.value, authPassword.value);
@@ -50,14 +50,16 @@ class AuthenticationPageController extends GetxController {
           break;
 
         default:
-          errorMessage.value = 'Ops! Algum erro inesperado ocorreu.';
+          errorMessage.value = 'Algum erro inesperado ocorreu durante a autenticação.';
           debugPrint(e.code);
           break;
       }
 
+      isLoading.value = false;
       return Get.bottomSheet(const AuthErrorBottomsheet());
     }
 
-    Get.offNamed(DonePage.route);
+    isLoading.value = false;
+    Get.offAllNamed(DonePage.route);
   }
 }
