@@ -33,7 +33,7 @@ class SignUpPage extends GetView<SignUpPageController> {
                     children: const [
                       SizedBox(height: 44),
                       LogoSection(),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                       SignInSection(),
                     ],
                   ),
@@ -86,7 +86,7 @@ class SignInSection extends GetView<SignUpPageController> {
     return LayoutBuilder(
       builder: (_, constraints) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Center(
             child: Container(
               decoration: BoxDecoration(
@@ -102,7 +102,7 @@ class SignInSection extends GetView<SignUpPageController> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
                 child: Form(
                   key: controller.formKey,
                   child: Column(

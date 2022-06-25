@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthController extends GetxController {
   static AuthController get instance => Get.find<AuthController>();
   static FirebaseAuth get auth => FirebaseAuth.instance;
+
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   User? get currentUser => auth.currentUser;
   final RxBool authTried = false.obs;
@@ -26,6 +29,31 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
+  Future<void> signInWithCredential(AuthCredential credential) async {
+    await auth.signInWithCredential(credential);
+  }
+
+  Future<UserCredential> signInWithEmailAndPassword(String email, String password) async {
+    return await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+  }
+
+  Future<AuthCredential?> signInWithGoogle() async {
+    final googleSignInAccount = await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      // Recupera as credenciais do usuário de conta Google
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      return credential;
+    }
+    return null;
+  }
+
   Future<UserCredential> signUpUser(String email, String password) async {
     return await auth.createUserWithEmailAndPassword(email: email.trim(), password: password.trim());
   }
@@ -34,11 +62,9 @@ class AuthController extends GetxController {
     await user.updateDisplayName(username.trim());
   }
 
-  Future<UserCredential> signInWithEmailAndPassword(String email, String password) async {
-    return await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
-  }
-
   Future<void> finishSession() async {
+    if (!kIsWeb) await googleSignIn.signOut();
+
     await auth.signOut();
   }
 }

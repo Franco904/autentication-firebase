@@ -1,4 +1,5 @@
 import 'package:authentication_firebase/core/controllers/auth_controller.dart';
+import 'package:authentication_firebase/core/enums.dart';
 import 'package:authentication_firebase/core/util/connectivity.dart';
 import 'package:authentication_firebase/modules/authentication/local_widgets/auth_error_bottomsheet.dart';
 import 'package:authentication_firebase/modules/done/done_page.dart';
@@ -12,6 +13,8 @@ class AuthenticationPageController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final RxBool isLoading = false.obs;
+  final RxBool authFailed = false.obs;
+  final Rx<SignInMethod> currentSignInMethod = Rx<SignInMethod>(SignInMethod.none);
 
   final RxString authEmail = ''.obs;
   final RxString authPassword = ''.obs;
@@ -20,32 +23,60 @@ class AuthenticationPageController extends GetxController {
   final FocusNode authEmailFocusNode = FocusNode();
   final FocusNode authPasswordFocusNode = FocusNode();
 
-  Future<void> signIn() async {
-    if (!await checkInternet()) return;
+  Future<void> signIn(SignInMethod signInMethod) async {
+    if (!await checkInternet() || authController.currentUser != null) return;
 
-    isLoading.value = true;
-
-    await Future.delayed(const Duration(milliseconds: 20));
-    formKey.currentState?.save();
-
-    final isFormValid = formKey.currentState?.validate();
-    if (isFormValid != null && !isFormValid) {
-      isLoading.value = false;
-      return;
-    }
-
-    await fetchUser();
-  }
-
-  Future<void> fetchUser() async {
+    currentSignInMethod.value = signInMethod;
     authController.authTried.value = true;
 
+    switch (signInMethod) {
+      case SignInMethod.emailAndPassword:
+        isLoading.value = true;
+
+        await Future.delayed(const Duration(milliseconds: 20));
+        formKey.currentState?.save();
+
+        final isFormValid = formKey.currentState?.validate();
+        if (isFormValid != null && !isFormValid) {
+          isLoading.value = false;
+          return;
+        }
+
+        await fetchUserEmailPassword();
+        break;
+
+      case SignInMethod.google:
+        await fetchUserGoogle();
+        break;
+
+      case SignInMethod.github:
+        await fetchUserGitHub();
+        break;
+
+      default:
+        authFailed.value = true;
+        errorMessage.value = 'Algum erro inesperado ocorreu durante a autenticação.';
+        break;
+    }
+
+    if (authFailed.value) {
+      isLoading.value = false;
+      Get.bottomSheet(const AuthErrorBottomsheet());
+    } else {
+      isLoading.value = false;
+      Get.offAllNamed(DonePage.route);
+    }
+  }
+
+  Future<void> fetchUserEmailPassword() async {
     try {
-      await authController.signInWithEmailAndPassword(authEmail.value, authPassword.value);
+      final res = await authController.signInWithEmailAndPassword(authEmail.value, authPassword.value);
+      debugPrint('AAA: $res');
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
         case 'wrong-password':
+          debugPrint('AAA: ${e.code}');
           errorMessage.value = 'Usuário e/ou senha incorretos.';
           break;
 
@@ -54,12 +85,37 @@ class AuthenticationPageController extends GetxController {
           debugPrint(e.code);
           break;
       }
-
-      isLoading.value = false;
-      return Get.bottomSheet(const AuthErrorBottomsheet());
+      authFailed.value = true;
+      return;
     }
-
-    isLoading.value = false;
-    Get.offAllNamed(DonePage.route);
+    authFailed.value = false;
   }
+
+  Future<void> fetchUserGoogle() async {
+    try {
+      final credential = await authController.signInWithGoogle();
+      if (credential == null) {
+        authFailed.value = true;
+        return;
+      }
+      await authController.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+        case 'invalid-credential':
+          errorMessage.value = 'Usuário e/ou senha incorretos.';
+          break;
+
+        default:
+          errorMessage.value = 'Algum erro inesperado ocorreu durante a autenticação.';
+          debugPrint(e.code);
+          break;
+      }
+      authFailed.value = true;
+      return;
+    }
+    authFailed.value = false;
+  }
+
+  Future<void> fetchUserGitHub() async {}
 }

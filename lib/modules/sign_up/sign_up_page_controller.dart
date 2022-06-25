@@ -23,7 +23,7 @@ class SignUpPageController extends GetxController {
   final FocusNode signUpPasswordFocusNode = FocusNode();
 
   Future<void> signUp() async {
-    if (!await checkInternet()) return;
+    if (!await checkInternet() || authController.currentUser != null) return;
 
     isLoading.value = true;
 
@@ -48,7 +48,7 @@ class SignUpPageController extends GetxController {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'email-already-in-use':
-          errorMessage.value = 'Este usuário já foi registrado anteriormente.';
+          errorMessage.value = 'Este email já está registrado.';
           break;
 
         default:

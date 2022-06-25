@@ -1,3 +1,4 @@
+import 'package:authentication_firebase/core/enums.dart';
 import 'package:authentication_firebase/core/theme/app_colors.dart';
 import 'package:authentication_firebase/global_widgets/standard_painter.dart';
 import 'package:authentication_firebase/modules/authentication/authentication_page_controller.dart';
@@ -5,6 +6,7 @@ import 'package:authentication_firebase/modules/authentication/local_widgets/ema
 import 'package:authentication_firebase/modules/authentication/local_widgets/password_field_auth.dart';
 import 'package:authentication_firebase/modules/sign_up/sign_up_page.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class AuthenticationPage extends GetView<AuthenticationPageController> {
@@ -31,7 +33,7 @@ class AuthenticationPage extends GetView<AuthenticationPageController> {
                     children: const [
                       SizedBox(height: 44),
                       LogoSection(),
-                      SizedBox(height: 16),
+                      SizedBox(height: 8),
                       AuthSection(),
                     ],
                   ),
@@ -84,7 +86,7 @@ class AuthSection extends GetView<AuthenticationPageController> {
     return LayoutBuilder(
       builder: (_, constraints) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Center(
             child: Container(
               decoration: BoxDecoration(
@@ -100,7 +102,7 @@ class AuthSection extends GetView<AuthenticationPageController> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
                 child: Form(
                   key: controller.formKey,
                   child: Column(
@@ -109,15 +111,36 @@ class AuthSection extends GetView<AuthenticationPageController> {
                       const EmailFieldAuth(),
                       const SizedBox(height: 24),
                       const PasswordFieldAuth(),
-                      const SizedBox(height: 24),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Wrap(
-                          alignment: WrapAlignment.end,
-                          spacing: 24,
-                          runSpacing: 12,
-                          children: [
-                            ElevatedButton(
+                      const SizedBox(height: 32),
+                      Column(
+                        children: [
+                          Obx(
+                            () => AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: controller.isLoading.value && controller.currentSignInMethod.value == SignInMethod.emailAndPassword
+                                  ? Transform.scale(
+                                      scale: 0.75,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  : SizedBox(
+                                      width: double.infinity,
+                                      height: 40,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          FocusScope.of(context).unfocus();
+                                          controller.signIn(SignInMethod.emailAndPassword);
+                                        },
+                                        child: const Text('Entrar', style: TextStyle(color: AppColors.white)),
+                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.greenMarineLight)),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 40,
+                            child: ElevatedButton(
                               onPressed: () => Get.offNamed(SignUpPage.route),
                               child: Text('Não tenho conta', style: TextStyle(color: Colors.grey[900])),
                               style: ElevatedButton.styleFrom(
@@ -125,29 +148,68 @@ class AuthSection extends GetView<AuthenticationPageController> {
                                 animationDuration: const Duration(milliseconds: 400),
                               ),
                             ),
-                            SizedBox(
-                              height: 48,
-                              child: Obx(
-                                () => AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 200),
-                                  child: controller.isLoading.value
-                                      ? Transform.scale(
-                                          scale: 0.75,
-                                          child: const CircularProgressIndicator(),
-                                        )
-                                      : ElevatedButton(
-                                          onPressed: () {
-                                            FocusScope.of(context).unfocus();
-                                            controller.signIn();
-                                          },
-                                          child: const Text('Entrar', style: TextStyle(color: AppColors.white)),
-                                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(AppColors.greenMarineLight)),
+                          ),
+                          SizedBox(height: 24, child: Divider(color: AppColors.grey500)),
+                          Obx(
+                            () => AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: controller.isLoading.value && controller.currentSignInMethod.value == SignInMethod.google
+                                  ? Transform.scale(
+                                      scale: 0.75,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  : SizedBox(
+                                      width: double.infinity,
+                                      height: 40,
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          FocusScope.of(context).unfocus();
+                                          controller.signIn(SignInMethod.google);
+                                        },
+                                        icon: const Padding(
+                                          padding: EdgeInsets.only(right: 4),
+                                          child: FaIcon(FontAwesomeIcons.google, color: AppColors.greenMarineLight, size: 16),
                                         ),
-                                ),
-                              ),
+                                        label: Text('Entrar com Google', style: TextStyle(color: Colors.grey[900])),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: AppColors.white,
+                                          animationDuration: const Duration(milliseconds: 400),
+                                        ),
+                                      ),
+                                    ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 12),
+                          Obx(
+                            () => AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: controller.isLoading.value && controller.currentSignInMethod.value == SignInMethod.github
+                                  ? Transform.scale(
+                                      scale: 0.75,
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  : SizedBox(
+                                      width: double.infinity,
+                                      height: 40,
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          FocusScope.of(context).unfocus();
+                                          controller.signIn(SignInMethod.github);
+                                        },
+                                        icon: const Padding(
+                                          padding: EdgeInsets.only(right: 4),
+                                          child: FaIcon(FontAwesomeIcons.github, color: AppColors.greenMarineLight, size: 16),
+                                        ),
+                                        label: Text('Entrar com GitHub', style: TextStyle(color: Colors.grey[900])),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: AppColors.white,
+                                          animationDuration: const Duration(milliseconds: 400),
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

@@ -6,7 +6,6 @@ ThemeData createTheme() {
   final theme = ThemeData.from(colorScheme: createColorScheme());
 
   return theme.copyWith(
-    dividerTheme: DividerThemeData(space: 0, color: AppColors.grey300),
     dialogTheme: const DialogTheme(
       backgroundColor: Color(0xFFFFFFFF),
       contentTextStyle: TextStyle(

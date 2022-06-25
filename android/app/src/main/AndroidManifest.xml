@@ -1,9 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.authentication_firebase">
    <application
-        android:label="authentication_firebase"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Auth Firebase"
+        android:icon="@mipmap/ic_auth_fire_logo">
         <activity
             android:name=".MainActivity"
             android:exported="true"
