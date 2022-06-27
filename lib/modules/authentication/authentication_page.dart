@@ -162,10 +162,7 @@ class AuthSection extends GetView<AuthenticationPageController> {
                                       width: double.infinity,
                                       height: 40,
                                       child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          FocusScope.of(context).unfocus();
-                                          controller.signIn(SignInMethod.google);
-                                        },
+                                        onPressed: () => controller.signIn(SignInMethod.google),
                                         icon: const Padding(
                                           padding: EdgeInsets.only(right: 4),
                                           child: FaIcon(FontAwesomeIcons.google, color: AppColors.greenMarineLight, size: 16),
@@ -193,8 +190,18 @@ class AuthSection extends GetView<AuthenticationPageController> {
                                       height: 40,
                                       child: ElevatedButton.icon(
                                         onPressed: () {
-                                          FocusScope.of(context).unfocus();
-                                          controller.signIn(SignInMethod.github);
+                                          Get.rawSnackbar(
+                                            snackPosition: SnackPosition.BOTTOM,
+                                            duration: const Duration(seconds: 2),
+                                            borderRadius: 8,
+                                            backgroundColor: AppColors.blackSurface,
+                                            margin: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+                                            padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
+                                            messageText: Text('Em desenvolvimento',
+                                                style: Get.theme.textTheme.caption!.copyWith(color: Colors.white, fontSize: 16)),
+                                          );
+
+                                          // controller.signIn(SignInMethod.github);
                                         },
                                         icon: const Padding(
                                           padding: EdgeInsets.only(right: 4),

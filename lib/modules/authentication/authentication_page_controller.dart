@@ -59,11 +59,10 @@ class AuthenticationPageController extends GetxController {
         break;
     }
 
+    isLoading.value = false;
     if (authFailed.value) {
-      isLoading.value = false;
       Get.bottomSheet(const AuthErrorBottomsheet());
     } else {
-      isLoading.value = false;
       Get.offAllNamed(DonePage.route);
     }
   }
@@ -73,16 +72,16 @@ class AuthenticationPageController extends GetxController {
       final res = await authController.signInWithEmailAndPassword(authEmail.value, authPassword.value);
       debugPrint('AAA: $res');
     } on FirebaseAuthException catch (e) {
+      debugPrint(e.code);
+
       switch (e.code) {
         case 'user-not-found':
         case 'wrong-password':
-          debugPrint('AAA: ${e.code}');
           errorMessage.value = 'Usuário e/ou senha incorretos.';
           break;
 
         default:
           errorMessage.value = 'Algum erro inesperado ocorreu durante a autenticação.';
-          debugPrint(e.code);
           break;
       }
       authFailed.value = true;
@@ -96,10 +95,13 @@ class AuthenticationPageController extends GetxController {
       final credential = await authController.signInWithGoogle();
       if (credential == null) {
         authFailed.value = true;
+        errorMessage.value = 'Falha ao recuperar credencial.';
         return;
       }
       await authController.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
+      debugPrint(e.code);
+
       switch (e.code) {
         case 'account-exists-with-different-credential':
         case 'invalid-credential':
@@ -108,7 +110,6 @@ class AuthenticationPageController extends GetxController {
 
         default:
           errorMessage.value = 'Algum erro inesperado ocorreu durante a autenticação.';
-          debugPrint(e.code);
           break;
       }
       authFailed.value = true;

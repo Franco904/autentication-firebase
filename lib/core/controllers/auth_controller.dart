@@ -29,8 +29,8 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
-  Future<void> signInWithCredential(AuthCredential credential) async {
-    await auth.signInWithCredential(credential);
+  Future<UserCredential> signInWithCredential(AuthCredential credential) async {
+    return await auth.signInWithCredential(credential);
   }
 
   Future<UserCredential> signInWithEmailAndPassword(String email, String password) async {

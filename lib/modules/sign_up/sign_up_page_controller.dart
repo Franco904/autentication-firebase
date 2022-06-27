@@ -46,14 +46,16 @@ class SignUpPageController extends GetxController {
         await authController.updateUsername(credential.user!, signUpUsername.value);
       }
     } on FirebaseAuthException catch (e) {
+      debugPrint(e.code);
+
       switch (e.code) {
+        case 'invalid-email':
         case 'email-already-in-use':
-          errorMessage.value = 'Este email já está registrado.';
+          errorMessage.value = 'Este email é inválido ou já está registrado.';
           break;
 
         default:
           errorMessage.value = 'Algum erro inesperado ocorreu durante o registro.';
-          debugPrint(e.code);
           break;
       }
       isLoading.value = false;
